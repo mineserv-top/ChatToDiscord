@@ -61,7 +61,7 @@ mc.listen('onChat', ( pl, msg ) => {
          * @param {string} pl.realName - The real name of the player.
          * @param {string} msg - The filtered chat message.
         */
-        embed.setDescription(`**${ pl.realName } > ${ createMessage(msg), filterBanWords }**`);
+        embed.setDescription(`**${ pl.realName } > ${ createMessage(msg, filterBanWords) }**`);
         channel.send({ embeds: [embed] });
     }
 })
