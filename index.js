@@ -16,12 +16,12 @@ if(!configFile.get('config')){
 }
 
 const config = configFile.get('config');
-client.config = config;
 const event = require('./events/messageCreate.js');
 
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.MessageContent,GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.GuildIntegrations]});
 client.login(config.token);
+client.config = config;
 
 /**
  * Event listener for the message creation event.
@@ -217,6 +217,9 @@ const send = (id, color, descr, content) => {
     embeds: [ embed ],
   });
 }
+
+// Export the send function for external use.
+ll.export(send, 'discord', 'send');
 
 /**
  * Filter out banned words from a message.
