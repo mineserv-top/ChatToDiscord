@@ -20,7 +20,7 @@ const event = require('./events/messageCreate.js');
 
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.MessageContent,GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.GuildIntegrations]});
-client.login(config.get('token'));
+client.login(config.token);
 
 /**
  * Event listener for the message creation event.
