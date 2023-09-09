@@ -2,13 +2,25 @@ ll.registerPlugin('ChatToDiscord', 'Game chat plugin for LLBDS', [1, 0, 0], {
     Author: 'Alpha',
 });
 
-const config = require('./plugins/ChatToDiscord/config.json');
+const configFile = new JsonConfigFile('./plugins/ChatToDiscord/config.json');
+if(!configFile.get('config')){
+    logger.info('Конфиг не был найден, создаю!')
+    configFile.init('config', {
+        token: '',
+        channelID: '',
+        supportGlobalChat: true,
+        filterBanWords: true
+    })
+
+    logger.info('Конфиг создан и лежит в ./plugins/ChatToDiscord/config.json, настрой его!')
+}
+
+const config = configFile.get('config')
 const event = require('./events/messageCreate.js');
 
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.MessageContent,GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.GuildIntegrations]});
-client.config = config;
-client.login(config.token);
+client.login(config.get('token'));
 
 /**
  * Event listener for the message creation event.
