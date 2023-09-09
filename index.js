@@ -4,18 +4,19 @@ ll.registerPlugin('ChatToDiscord', 'Game chat plugin for LLBDS', [1, 0, 0], {
 
 const configFile = new JsonConfigFile('./plugins/ChatToDiscord/config.json');
 if(!configFile.get('config')){
-    logger.info('Конфиг не был найден, создаю!')
+    logger.info('Конфиг не был найден, создаю!');
     configFile.init('config', {
         token: '',
         channelID: '',
         supportGlobalChat: true,
         filterBanWords: true
-    })
+    });
 
-    logger.info('Конфиг создан и лежит в ./plugins/ChatToDiscord/config.json, настрой его!')
+    logger.info('Конфиг создан и лежит в ./plugins/ChatToDiscord/config.json, настрой его!');
 }
 
-const config = configFile.get('config')
+const config = configFile.get('config');
+client.config = config;
 const event = require('./events/messageCreate.js');
 
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
