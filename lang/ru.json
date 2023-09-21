@@ -1,0 +1,8 @@
+{
+    "playerJoined": "Игрок {playerName} присоединился к игре!",
+    "playerLeft": "Игрок {playerName} покинул игру!",
+    "playerDie": "Игрок $name умер!",
+    "playerDieFrom": "Игрок $name умер от $entity!",
+    "bedEnter": "Игрок $name лёг спать!",
+    "serverStarted": "Сервер запущен!"
+}

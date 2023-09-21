@@ -1,0 +1,8 @@
+{
+    "playerJoined": "Player $name joined the game!",
+    "playerLeft": "Player $name left the game!",
+    "playerDie": "Player $name died!",
+    "playerDieFrom": "Player $name died from $entity!",
+    "bedEnter": "Player $name enter the bed!",
+    "serverStarted": "Server started!"
+}

@@ -6,6 +6,7 @@ const configFile = new JsonConfigFile('./plugins/ChatToDiscord/config.json');
 if(!configFile.get('config')){
     logger.info('Конфиг не был найден, создаю!');
     configFile.init('config', {
+        lang: 'en',
         token: '',
         channelID: '',
         supportGlobalChat: true,
@@ -17,11 +18,25 @@ if(!configFile.get('config')){
 
 const config = configFile.get('config');
 const event = require('./events/messageCreate.js');
+const lang = require(`./${config.lang}.json`)
 
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.MessageContent,GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.GuildIntegrations]});
 client.login(config.token);
 client.config = config;
+
+
+const localize = (key, placeholders = {}) => {
+    if (lang[key]) {
+        let localizedString = lang[key];
+        for (const placeholder in placeholders) {
+            localizedString = localizedString.replace(`$${placeholder}`, placeholders[placeholder]);
+        }
+        return localizedString;
+    } else {
+        return key;
+    }
+}
 
 /**
  * Event listener for the message creation event.
@@ -96,7 +111,8 @@ mc.listen('onJoin', ( pl ) => {
      * Construct and send an embed message for player join event.
      * @param {string} pl.realName - The real name of the player.
     */
-    embed.setDescription(`**Player ${ pl.realName } joined the game!**`);
+    const message = localize('playerJoined', { name: pl.realName });
+    embed.setDescription(`**${ message }**`);
     channel.send({ embeds: [embed] });
 })
 
@@ -116,7 +132,9 @@ mc.listen('onLeft', ( pl ) => {
      * Construct and send an embed message for player leave event.
      * @param {string} pl.realName - The real name of the player.
     */
-    embed.setDescription(`**Player ${ pl.realName } left the game!**`);
+
+    const message = localize('playerLeft', { name: pl.realName });
+    embed.setDescription(`**${ message }**`);
     channel.send({ embeds: [embed] });
 })
 
@@ -146,10 +164,12 @@ mc.listen('onPlayerDie', (pl, en) => {
      * @param {string} en.name - The name of the entity.
      */
     if (en) {
-        embed.setDescription(`**Player ${ pl.realName } died by ${ en.name }!**`);
+        const message = localize('playerDieFrom', { name: pl.realName, entity: en.name });
+        embed.setDescription(`**${ message }**`);
         channel.send({ embeds: [embed] });
     } else {
-        embed.setDescription(`**Player ${ pl.realName } died!**`);
+        const message = localize('playerDie', { name: pl.realName });
+        embed.setDescription(`**${ message }**`);
         channel.send({ embeds: [embed] });
     }
 })
@@ -171,11 +191,9 @@ mc.listen('onBedEnter', (pl) => {
     } else if (pl.pos.dimid === 1) {
         embed.setColor('#fc0303');
     }
-    /**
-     * Construct and send an embed message for player bed enter event.
-     * @param {string} pl.realName - The real name of the player.
-    */
-    embed.setDescription(`**Player ${pl.realName} enter the bed!**`);
+
+    const message = localize('bedEnter', { name: pl.realName });
+    embed.setDescription(`**${ message }**`);
 
     channel.send({ embeds: [embed] });
 });
@@ -191,10 +209,11 @@ mc.listen('onServerStarted', () => {
         const embed = new EmbedBuilder();
     
         embed.setColor('#9d00ff');
-        embed.setDescription(`**Server started!**`);
     
+        const message = localize('serverStarted', { name: pl.realName });
+        embed.setDescription(`**${ message }**`);
         channel.send({ embeds: [ embed ] });
-    }, 5000);
+    }, 10000);
 })
 
 /**
