@@ -18,7 +18,7 @@ if(!configFile.get('config')){
 
 const config = configFile.get('config');
 const event = require('./events/messageCreate.js');
-const lang = require(`./${config.lang}.json`)
+const lang = require(`./lang/${config.lang}.json`)
 
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.MessageContent,GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.GuildIntegrations]});
